@@ -31,8 +31,7 @@ export type UploadReturnType =
     }
 
 interface CustomImageOptions
-  extends ImageOptions,
-    Omit<FileValidationOptions, "allowBase64"> {
+  extends ImageOptions, Omit<FileValidationOptions, "allowBase64"> {
   uploadFn?: (file: File, editor: Editor) => Promise<UploadReturnType>
   onImageRemoved?: (props: Attrs) => void
   onActionSuccess?: (props: ImageActionProps) => void
@@ -176,8 +175,14 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
   atom: true,
 
   addOptions() {
+    const parentOptions = this.parent?.() || {}
     return {
-      ...this.parent?.(),
+      ...parentOptions,
+      inline: false,
+      allowBase64: false,
+      HTMLAttributes: {},
+      resize: false,
+
       allowedMimeTypes: [],
       maxFileSize: 0,
       uploadFn: undefined,
@@ -185,9 +190,6 @@ export const Image = TiptapImage.extend<CustomImageOptions>({
       downloadImage: undefined,
       copyImage: undefined,
       copyLink: undefined,
-      inline: false,
-      allowBase64: false,
-      HTMLAttributes: {},
     }
   },
 
