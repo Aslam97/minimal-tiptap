@@ -2,7 +2,7 @@ import "./styles/index.css"
 
 import type { Content, Editor } from "@tiptap/react"
 import type { UseMinimalTiptapEditorProps } from "./hooks/use-minimal-tiptap"
-import { EditorContent } from "@tiptap/react"
+import { EditorContent, EditorContext } from "@tiptap/react"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { SectionOne } from "./components/section/one"
@@ -13,9 +13,12 @@ import { SectionFive } from "./components/section/five"
 import { LinkBubbleMenu } from "./components/bubble-menu/link-bubble-menu"
 import { useMinimalTiptapEditor } from "./hooks/use-minimal-tiptap"
 import { MeasuredContainer } from "./components/measured-container"
+import { useTiptapEditor } from "./hooks/use-tiptap-editor"
 
-export interface MinimalTiptapProps
-  extends Omit<UseMinimalTiptapEditorProps, "onUpdate"> {
+export interface MinimalTiptapProps extends Omit<
+  UseMinimalTiptapEditorProps,
+  "onUpdate"
+> {
   value?: Content
   onChange?: (value: Content) => void
   className?: string
@@ -83,6 +86,32 @@ export const MinimalTiptapEditor = ({
   }
 
   return (
+    <EditorContext.Provider value={{ editor }}>
+      <MainMinimalTiptapEditor
+        editor={editor}
+        className={className}
+        editorContentClassName={editorContentClassName}
+      />
+    </EditorContext.Provider>
+  )
+}
+
+MinimalTiptapEditor.displayName = "MinimalTiptapEditor"
+
+export default MinimalTiptapEditor
+
+export const MainMinimalTiptapEditor = ({
+  editor: providedEditor,
+  className,
+  editorContentClassName,
+}: MinimalTiptapProps & { editor: Editor }) => {
+  const { editor } = useTiptapEditor(providedEditor)
+
+  if (!editor) {
+    return null
+  }
+
+  return (
     <MeasuredContainer
       as="div"
       name="editor"
@@ -101,7 +130,3 @@ export const MinimalTiptapEditor = ({
     </MeasuredContainer>
   )
 }
-
-MinimalTiptapEditor.displayName = "MinimalTiptapEditor"
-
-export default MinimalTiptapEditor
