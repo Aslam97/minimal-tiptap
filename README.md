@@ -6,9 +6,6 @@
 
 The Minimal Tiptap Editor is a lightweight, customizable rich text editor component designed for integration with [Shadcn UI](https://ui.shadcn.com). It provides an intuitive interface for text formatting and editing while maintaining excellent performance.
 
-> **Note**: There are currently no online previews or demos available for this project.  
-> In the meantime, please clone the repository and try it out locally.
-
 ## Table of Contents
 
 - [Minimal Tiptap Editor](#minimal-tiptap-editor)
