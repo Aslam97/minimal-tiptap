@@ -35,10 +35,7 @@ async function buildRegistry() {
     devDependencies: getDevDependencies(),
     tailwind: {
       config: {
-        plugins: [
-          'require("tailwindcss-animate")',
-          'require("@tailwindcss/typography")',
-        ],
+        plugins: ['require("@tailwindcss/typography")'],
         theme: {
           extend: {
             typography: {
@@ -105,7 +102,7 @@ function getDependencies(): string[] {
 }
 
 function getDevDependencies(): string[] {
-  return ["@tailwindcss/typography", "tailwindcss-animate"]
+  return ["@tailwindcss/typography", "tw-animate-css"]
 }
 
 function getRegistryDependencies(): string[] {
