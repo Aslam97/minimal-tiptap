@@ -4,21 +4,18 @@ import type { Content, UseEditorOptions } from "@tiptap/react"
 import { StarterKit } from "@tiptap/starter-kit"
 import { useEditor } from "@tiptap/react"
 import { Typography } from "@tiptap/extension-typography"
-import { Placeholder } from "@tiptap/extension-placeholder"
-import { Underline } from "@tiptap/extension-underline"
 import { TextStyle } from "@tiptap/extension-text-style"
+import { Placeholder, Selection } from "@tiptap/extensions"
 import {
-  Link,
   Image,
   HorizontalRule,
   CodeBlockLowlight,
-  Selection,
   Color,
   UnsetAllMarks,
   ResetMarksOnEnter,
   FileHandler,
 } from "../extensions"
-import { Markdown } from 'tiptap-markdown';
+import { Markdown } from "@tiptap/markdown"
 import { cn } from "@/lib/utils"
 import { fileToBase64, getOutput, randomId } from "../utils"
 import { useThrottle } from "../hooks/use-throttle"
@@ -32,39 +29,65 @@ export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   throttleDelay?: number
   onUpdate?: (content: Content) => void
   onBlur?: (content: Content) => void
+  uploader?: (file: File) => Promise<string>
 }
 
-const createExtensions = (placeholder: string) => [
+async function fakeuploader(file: File): Promise<string> {
+  // NOTE: This is a fake upload function. Replace this with your own upload logic.
+  // This function should return the uploaded image URL.
+
+  // wait 3s to simulate upload
+  await new Promise((resolve) => setTimeout(resolve, 3000))
+
+  const src = await fileToBase64(file)
+
+  return src
+}
+
+const createExtensions = ({
+  placeholder,
+  uploader,
+}: {
+  placeholder: string
+  uploader?: (file: File) => Promise<string>
+}) => [
   StarterKit.configure({
-    horizontalRule: false,
-    codeBlock: false,
-    paragraph: { HTMLAttributes: { class: "text-node" } },
-    heading: { HTMLAttributes: { class: "heading-node" } },
     blockquote: { HTMLAttributes: { class: "block-node" } },
+    // bold
     bulletList: { HTMLAttributes: { class: "list-node" } },
-    orderedList: { HTMLAttributes: { class: "list-node" } },
     code: { HTMLAttributes: { class: "inline", spellcheck: "false" } },
+    codeBlock: false,
+    // document
     dropcursor: { width: 2, class: "ProseMirror-dropcursor border" },
+    // gapcursor
+    // hardBreak
+    heading: { HTMLAttributes: { class: "heading-node" } },
+    // undoRedo
+    horizontalRule: false,
+    // italic
+    // listItem
+    // listKeymap
+    link: {
+      enableClickSelection: true,
+      openOnClick: false,
+      HTMLAttributes: {
+        class: "link",
+      },
+    },
+    orderedList: { HTMLAttributes: { class: "list-node" } },
+    paragraph: { HTMLAttributes: { class: "text-node" } },
+    // strike
+    // text
+    // underline
+    // trailingNode
   }),
   Markdown,
-  Link,
-  Underline,
   Image.configure({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
     allowBase64: true,
     uploadFn: async (file) => {
-      // NOTE: This is a fake upload function. Replace this with your own upload logic.
-      // This function should return the uploaded image URL.
-
-      // wait 3s to simulate upload
-      await new Promise((resolve) => setTimeout(resolve, 3000))
-
-      const src = await fileToBase64(file)
-
-      // either return { id: string | number, src: string } or just src
-      // return src;
-      return { id: randomId(), src }
+      return uploader ? await uploader(file) : await fakeuploader(file)
     },
     onToggle(editor, files, pos) {
       editor.commands.insertContentAt(
@@ -170,6 +193,7 @@ export const useMinimalTiptapEditor = ({
   throttleDelay = 0,
   onUpdate,
   onBlur,
+  uploader,
   ...props
 }: UseMinimalTiptapEditorProps) => {
   const throttledSetValue = useThrottle(
@@ -197,13 +221,14 @@ export const useMinimalTiptapEditor = ({
   )
 
   const editor = useEditor({
-    extensions: createExtensions(placeholder),
+    immediatelyRender: false,
+    extensions: createExtensions({ placeholder, uploader }),
     editorProps: {
       attributes: {
         autocomplete: "off",
         autocorrect: "off",
         autocapitalize: "off",
-        class: cn("focus:outline-none", editorClassName),
+        class: cn("focus:outline-hidden", editorClassName),
       },
     },
     onUpdate: ({ editor }) => handleUpdate(editor),
