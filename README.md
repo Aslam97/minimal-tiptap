@@ -9,7 +9,6 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
 ## Table of Contents
 
 - [Minimal Tiptap Editor](#minimal-tiptap-editor)
-
   - [Overview](#overview)
   - [Table of Contents](#table-of-contents)
   - [Installation](#installation)
@@ -25,18 +24,12 @@ The Minimal Tiptap Editor is a lightweight, customizable rich text editor compon
   - [Related Projects](#related-projects)
   - [License](#license)
 
-## Tailwind 4 & React 19 Support
-
-There is an open PR for migrating this project to **Tailwind CSS v4** and **React 19**, but it has not been merged since I am not currently using these versions.
-
-If you want to use Tailwind 4 and React 19, you can check out the [`tailwind-v4`](https://github.com/Aslam97/shadcn-minimal-tiptap/pull/91) branch. Contributions and feedback are welcome!
-
 ## Installation
 
-If you are using shadcn/ui in your project, you can install the component directly from the registry. 
+If you are using shadcn/ui in your project, you can install the component directly from the registry.
 
 ```bash
-npx shadcn@2.1.8 add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/block-registry.json
+npx shadcn@latest add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-tiptap/main/registry/block-registry.json
 ```
 
 ## Manual Installation
@@ -44,7 +37,7 @@ npx shadcn@2.1.8 add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-ti
 1. Install the required dependencies:
 
 ```bash
-npm install @tiptap/extension-code-block-lowlight lowlight react-medium-image-zoom @tiptap/extension-color @tiptap/extension-heading @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-link @tiptap/extension-placeholder @tiptap/extension-text-style @tiptap/extension-typography @tiptap/pm @tiptap/react @tiptap/starter-kit @tiptap/extension-underline
+npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-text-style @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit @tiptap/markdown
 ```
 
 2. Configure the `TooltipProvider`:
@@ -62,6 +55,14 @@ export const App = () => {
     </TooltipProvider>
   )
 }
+```
+
+## Tailwind CSS Setup
+
+Ensure you reference your Tailwind CSS entry point in `/minimal-tiptap/styles/index.css`:
+
+```
+@reference "path-to-your-entry-point-tailwind.css";
 ```
 
 ## Dependencies
@@ -114,15 +115,15 @@ export const App = () => {
 
 The editor accepts all standard Tiptap editor props, plus these additional configuration options:
 
-| Prop                     | Type                       | Default | Description                                |
-| ------------------------ | -------------------------- | ------- | ------------------------------------------ |
-| `value`                  | string                     | -       | Initial editor content                     |
-| `onChange`               | function                   | -       | Content change event handler               |
-| `editorContentClassName` | string                     | -       | CSS class for the editor content container |
-| `output`                 | 'html' \| 'json' \| 'text' | 'html'  | Desired output format                      |
-| `placeholder`            | string                     | -       | Editor placeholder text                    |
-| `editorClassName`        | string                     | -       | CSS class for the editor container         |
-| `throttleDelay`          | number                     | 0       | Update throttling delay in milliseconds    |
+| Prop                     | Type                                      | Default | Description                                |
+| ------------------------ | ----------------------------------------- | ------- | ------------------------------------------ |
+| `value`                  | string                                    | -       | Initial editor content                     |
+| `onChange`               | function                                  | -       | Content change event handler               |
+| `editorContentClassName` | string                                    | -       | CSS class for the editor content container |
+| `output`                 | 'html' \| 'json' \| 'text' \| 'markdown'  | 'html'  | Desired output format                      |
+| `placeholder`            | string                                    | -       | Editor placeholder text                    |
+| `editorClassName`        | string                                    | -       | CSS class for the editor container         |
+| `throttleDelay`          | number                                    | 0       | Update throttling delay in milliseconds    |
 
 ## Image Support
 
@@ -207,6 +208,7 @@ onCloseAutoFocus={event => event.preventDefault()}
 - Performance optimization through configurable `shouldRerenderOnTransaction`
 - Comprehensive image handling with upload support
 - Customizable toolbar with flexible section configuration
+- Markdown input/output support via official `@tiptap/markdown` extension
 
 ## Development
 
@@ -225,14 +227,18 @@ npm run host-registry
 Use the local registry in a project:
 
 ```bash
-npx shadcn@2.1.8 add http://127.0.0.1:8080/block-registry.json -o
+npx shadcn@latest add http://127.0.0.1:8080/block-registry.json -o
 ```
 
 Or initialize a new project with the local registry:
 
 ```bash
-npx shadcn@2.1.8 init http://127.0.0.1:8080/block-registry.json
+npx shadcn@latest init http://127.0.0.1:8080/block-registry.json
 ```
+
+## Official Tiptap Template
+
+For a more comprehensive Tiptap editor template, check out the official [Tiptap Template](https://tiptap.dev/docs/ui-components/templates/simple-editor).
 
 ## Related Projects
 
