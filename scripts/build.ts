@@ -87,6 +87,7 @@ function getDependencies(): string[] {
     "lowlight",
     "react-medium-image-zoom",
     "@radix-ui/react-icons",
+    "@tiptap/extension-bubble-menu",
     "@tiptap/extension-code-block-lowlight",
     "@tiptap/extension-color",
     "@tiptap/extension-horizontal-rule",
