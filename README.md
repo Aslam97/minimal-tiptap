@@ -37,7 +37,7 @@ npx shadcn@latest add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-t
 1. Install the required dependencies:
 
 ```bash
-npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-text-style @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit @tiptap/markdown
+npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-bubble-menu @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-list @tiptap/extension-table @tiptap/extension-text-style @tiptap/markdown @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
 2. Configure the `TooltipProvider`:
