@@ -35,10 +35,7 @@ async function buildRegistry() {
     devDependencies: getDevDependencies(),
     tailwind: {
       config: {
-        plugins: [
-          'require("tailwindcss-animate")',
-          'require("@tailwindcss/typography")',
-        ],
+        plugins: ['require("@tailwindcss/typography")'],
         theme: {
           extend: {
             typography: {
@@ -90,10 +87,13 @@ function getDependencies(): string[] {
     "lowlight",
     "react-medium-image-zoom",
     "@radix-ui/react-icons",
+    "@tiptap/extension-bubble-menu",
     "@tiptap/extension-code-block-lowlight",
     "@tiptap/extension-color",
     "@tiptap/extension-horizontal-rule",
     "@tiptap/extension-image",
+    "@tiptap/extension-list",
+    "@tiptap/extension-table",
     "@tiptap/extension-text-style",
     "@tiptap/extension-typography",
     "@tiptap/extensions",
@@ -105,7 +105,7 @@ function getDependencies(): string[] {
 }
 
 function getDevDependencies(): string[] {
-  return ["@tailwindcss/typography", "tailwindcss-animate"]
+  return ["@tailwindcss/typography", "tw-animate-css"]
 }
 
 function getRegistryDependencies(): string[] {
