@@ -92,6 +92,8 @@ function getDependencies(): string[] {
     "@tiptap/extension-color",
     "@tiptap/extension-horizontal-rule",
     "@tiptap/extension-image",
+    "@tiptap/extension-list",
+    "@tiptap/extension-table",
     "@tiptap/extension-text-style",
     "@tiptap/extension-typography",
     "@tiptap/extensions",
