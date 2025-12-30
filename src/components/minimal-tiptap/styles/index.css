@@ -188,3 +188,88 @@
 .minimal-tiptap-editor .ProseMirror .selection::selection {
   background: transparent;
 }
+
+/* Tables */
+.minimal-tiptap-editor .ProseMirror table {
+  @apply my-4 w-full border-collapse overflow-hidden rounded-lg border border-border;
+}
+
+.minimal-tiptap-editor .ProseMirror table td,
+.minimal-tiptap-editor .ProseMirror table th {
+  @apply relative min-w-[100px] border border-border px-3 py-2 text-left align-top;
+}
+
+.minimal-tiptap-editor .ProseMirror table th {
+  @apply bg-muted font-semibold;
+}
+
+.minimal-tiptap-editor .ProseMirror table .selectedCell {
+  @apply bg-primary/10;
+}
+
+.minimal-tiptap-editor .ProseMirror table .selectedCell::after {
+  @apply pointer-events-none absolute inset-0 bg-primary/10 content-[''];
+}
+
+/* Column resize handle */
+.minimal-tiptap-editor .ProseMirror .column-resize-handle {
+  @apply absolute -right-0.5 top-0 bottom-0 z-10 w-1 cursor-col-resize bg-primary/50;
+}
+
+.minimal-tiptap-editor .ProseMirror.resize-cursor {
+  @apply cursor-col-resize;
+}
+
+/* Mentions */
+.minimal-tiptap-editor .ProseMirror .mention {
+  @apply inline-block rounded-md bg-primary/10 px-1.5 py-0.5 font-medium text-primary;
+}
+
+.minimal-tiptap-editor .ProseMirror .mention:hover {
+  @apply bg-primary/20;
+}
+
+/* Highlight */
+.minimal-tiptap-editor .ProseMirror mark {
+  @apply rounded-sm bg-yellow-200 px-0.5 dark:bg-yellow-500/40;
+}
+
+.minimal-tiptap-editor .ProseMirror mark[data-color] {
+  background-color: var(--highlight-color, #fef08a);
+}
+
+/* Details / Collapsible */
+.minimal-tiptap-editor .ProseMirror details {
+  @apply my-2 rounded-lg border border-border bg-muted/30;
+}
+
+.minimal-tiptap-editor .ProseMirror details summary {
+  @apply cursor-pointer px-4 py-2 font-medium select-none;
+}
+
+.minimal-tiptap-editor .ProseMirror details summary:hover {
+  @apply bg-muted/50;
+}
+
+.minimal-tiptap-editor .ProseMirror details[open] summary {
+  @apply border-b border-border;
+}
+
+.minimal-tiptap-editor .ProseMirror details > div:not(summary) {
+  @apply px-4 py-3;
+}
+
+/* YouTube / Twitch embeds */
+.minimal-tiptap-editor .ProseMirror .youtube-node,
+.minimal-tiptap-editor .ProseMirror .twitch-node {
+  @apply my-4;
+}
+
+.minimal-tiptap-editor .ProseMirror iframe {
+  @apply max-w-full rounded-lg border border-border;
+  aspect-ratio: 16 / 9;
+}
+
+.minimal-tiptap-editor .ProseMirror .ProseMirror-selectednode iframe {
+  @apply outline outline-2 outline-offset-2 outline-primary;
+}

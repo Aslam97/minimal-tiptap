@@ -37,7 +37,7 @@ npx shadcn@latest add https://raw.githubusercontent.com/Aslam97/shadcn-minimal-t
 1. Install the required dependencies:
 
 ```bash
-npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-text-style @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit
+npm install lowlight react-medium-image-zoom @radix-ui/react-icons @tiptap/extension-bubble-menu @tiptap/extension-code-block-lowlight @tiptap/extension-color @tiptap/extension-horizontal-rule @tiptap/extension-image @tiptap/extension-list @tiptap/extension-table @tiptap/extension-text-style @tiptap/markdown @tiptap/extension-typography @tiptap/extensions @tiptap/pm @tiptap/react @tiptap/starter-kit
 ```
 
 2. Configure the `TooltipProvider`:
@@ -115,15 +115,15 @@ export const App = () => {
 
 The editor accepts all standard Tiptap editor props, plus these additional configuration options:
 
-| Prop                     | Type                       | Default | Description                                |
-| ------------------------ | -------------------------- | ------- | ------------------------------------------ |
-| `value`                  | string                     | -       | Initial editor content                     |
-| `onChange`               | function                   | -       | Content change event handler               |
-| `editorContentClassName` | string                     | -       | CSS class for the editor content container |
-| `output`                 | 'html' \| 'json' \| 'text' | 'html'  | Desired output format                      |
-| `placeholder`            | string                     | -       | Editor placeholder text                    |
-| `editorClassName`        | string                     | -       | CSS class for the editor container         |
-| `throttleDelay`          | number                     | 0       | Update throttling delay in milliseconds    |
+| Prop                     | Type                                      | Default | Description                                |
+| ------------------------ | ----------------------------------------- | ------- | ------------------------------------------ |
+| `value`                  | string                                    | -       | Initial editor content                     |
+| `onChange`               | function                                  | -       | Content change event handler               |
+| `editorContentClassName` | string                                    | -       | CSS class for the editor content container |
+| `output`                 | 'html' \| 'json' \| 'text' \| 'markdown'  | 'html'  | Desired output format                      |
+| `placeholder`            | string                                    | -       | Editor placeholder text                    |
+| `editorClassName`        | string                                    | -       | CSS class for the editor container         |
+| `throttleDelay`          | number                                    | 0       | Update throttling delay in milliseconds    |
 
 ## Image Support
 
@@ -208,6 +208,7 @@ onCloseAutoFocus={event => event.preventDefault()}
 - Performance optimization through configurable `shouldRerenderOnTransaction`
 - Comprehensive image handling with upload support
 - Customizable toolbar with flexible section configuration
+- Markdown input/output support via official `@tiptap/markdown` extension
 
 ## Development
 
