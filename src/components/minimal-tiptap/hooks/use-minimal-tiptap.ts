@@ -268,24 +268,6 @@ export const useMinimalTiptapEditor = ({
     ...props,
   })
 
-  // Sync editor content when value changes externally
-  React.useEffect(() => {
-    if (!editor || editor.isDestroyed || value === undefined) return
-
-    const current = getOutput(editor, output)
-    // JSON returns new object refs, so stringify to compare by value
-    const isEqual =
-      output === "json"
-        ? JSON.stringify(current) === JSON.stringify(value)
-        : current === value
-
-    if (!isEqual) {
-      editor.commands.setContent(value, {
-        contentType: output === "markdown" ? "markdown" : undefined,
-      })
-    }
-  }, [editor, value, output])
-
   return editor
 }
 
