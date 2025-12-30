@@ -3,9 +3,8 @@ import { Plugin } from "@tiptap/pm/state"
 
 export const Color = TiptapColor.extend({
   addProseMirrorPlugins() {
-    const parentPlugins = (this as { parent?: () => Plugin[] }).parent?.() || []
     return [
-      ...parentPlugins,
+      ...(this.parent?.() || []),
       new Plugin({
         props: {
           handleKeyDown: (_, event) => {

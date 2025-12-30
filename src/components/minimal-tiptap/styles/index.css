@@ -4,15 +4,6 @@
 @import "./partials/typography.css";
 @import "./partials/zoom.css";
 
-/*
- * REGISTRY USERS: Update this path to point to your project's global CSS file
- * that contains the shadcn/ui @theme definitions.
- * This is required for Tailwind v4 to resolve theme colors like `text-primary`.
- *
- * Common paths after installing to components/ui/minimal-tiptap/:
- *   - Next.js App Router: @reference "../../../../app/globals.css";
- *   - Next.js Pages:      @reference "../../../../styles/globals.css";
- */
 @reference "../../../global.css";
 
 :root {
