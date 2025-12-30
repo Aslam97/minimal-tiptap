@@ -47,11 +47,9 @@ async function fakeuploader(file: File): Promise<string> {
 const createExtensions = ({
   placeholder,
   uploader,
-  output = "html",
 }: {
   placeholder: string
   uploader?: (file: File) => Promise<string>
-  output?: "html" | "json" | "text" | "markdown"
 }) => [
   StarterKit.configure({
     blockquote: { HTMLAttributes: { class: "block-node" } },
@@ -83,8 +81,7 @@ const createExtensions = ({
     // underline
     // trailingNode
   }),
-  // Add Markdown extension when markdown output is enabled
-  ...(output === "markdown" ? [Markdown] : []),
+  Markdown,
   Image.configure({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
@@ -212,12 +209,9 @@ export const useMinimalTiptapEditor = ({
   const handleCreate = React.useCallback(
     (editor: Editor) => {
       if (value && editor.isEmpty) {
-        // Use contentType: 'markdown' when markdown mode is enabled
-        if (output === "markdown" && typeof value === "string") {
-          editor.commands.setContent(value, { contentType: "markdown" })
-        } else {
-          editor.commands.setContent(value)
-        }
+        editor.commands.setContent(value, {
+          contentType: output === "markdown" ? "markdown" : undefined,
+        })
       }
     },
     [value, output]
@@ -230,7 +224,7 @@ export const useMinimalTiptapEditor = ({
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: createExtensions({ placeholder, uploader, output }),
+    extensions: createExtensions({ placeholder, uploader }),
     editorProps: {
       attributes: {
         autocomplete: "off",
@@ -245,19 +239,21 @@ export const useMinimalTiptapEditor = ({
     ...props,
   })
 
-  // Update editor content when value changes externally
-  // This fixes the bug where markdown renders as plain text after switching components
+  // Sync editor content when value changes externally
   React.useEffect(() => {
-    if (!editor || editor.isDestroyed) return
-    
-    const currentContent = getOutput(editor, output)
-    // Only update if content has actually changed
-    if (currentContent !== value && value !== undefined) {
-      if (output === "markdown" && typeof value === "string") {
-        editor.commands.setContent(value, { contentType: "markdown" })
-      } else {
-        editor.commands.setContent(value ?? "")
-      }
+    if (!editor || editor.isDestroyed || value === undefined) return
+
+    const current = getOutput(editor, output)
+    // JSON returns new object refs, so stringify to compare by value
+    const isEqual =
+      output === "json"
+        ? JSON.stringify(current) === JSON.stringify(value)
+        : current === value
+
+    if (!isEqual) {
+      editor.commands.setContent(value, {
+        contentType: output === "markdown" ? "markdown" : undefined,
+      })
     }
   }, [editor, value, output])
 

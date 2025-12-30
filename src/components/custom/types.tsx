@@ -29,7 +29,7 @@ const features = [
         throttleDelay={2000}
         className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
         editorContentClassName="overflow-auto h-full"
-        output="markdown"
+        output="html"
         placeholder="Type your description here..."
         editable={true}
         editorClassName="focus:outline-hidden px-5 py-4 h-full"
@@ -50,6 +50,21 @@ const features = [
           console.log("Updated value:", value)
         }}
         placeholder="This is your placeholder..."
+        editable={true}
+        editorClassName="focus:outline-hidden px-5 py-4 h-full"
+      />
+    ),
+  },
+  {
+    name: "Minimal Tiptap 4",
+    className: "col-span-3 lg:col-span-2",
+    background: (
+      <MinimalTiptapEditor
+        throttleDelay={2000}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
+        editorContentClassName="overflow-auto h-full"
+        output="markdown"
+        placeholder="Type your description here..."
         editable={true}
         editorClassName="focus:outline-hidden px-5 py-4 h-full"
       />
