@@ -6,6 +6,7 @@ import { useEditor } from "@tiptap/react"
 import { Typography } from "@tiptap/extension-typography"
 import { TextStyle } from "@tiptap/extension-text-style"
 import { Placeholder, Selection } from "@tiptap/extensions"
+import { Markdown } from "@tiptap/markdown"
 import {
   Image,
   HorizontalRule,
@@ -15,7 +16,6 @@ import {
   ResetMarksOnEnter,
   FileHandler,
 } from "../extensions"
-import { Markdown } from "@tiptap/markdown"
 import { cn } from "@/lib/utils"
 import { fileToBase64, getOutput, randomId } from "../utils"
 import { useThrottle } from "../hooks/use-throttle"
@@ -47,9 +47,11 @@ async function fakeuploader(file: File): Promise<string> {
 const createExtensions = ({
   placeholder,
   uploader,
+  output = "html",
 }: {
   placeholder: string
   uploader?: (file: File) => Promise<string>
+  output?: "html" | "json" | "text" | "markdown"
 }) => [
   StarterKit.configure({
     blockquote: { HTMLAttributes: { class: "block-node" } },
@@ -81,7 +83,8 @@ const createExtensions = ({
     // underline
     // trailingNode
   }),
-  Markdown,
+  // Add Markdown extension when markdown output is enabled
+  ...(output === "markdown" ? [Markdown] : []),
   Image.configure({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
@@ -209,10 +212,15 @@ export const useMinimalTiptapEditor = ({
   const handleCreate = React.useCallback(
     (editor: Editor) => {
       if (value && editor.isEmpty) {
-        editor.commands.setContent(value)
+        // Use contentType: 'markdown' when markdown mode is enabled
+        if (output === "markdown" && typeof value === "string") {
+          editor.commands.setContent(value, { contentType: "markdown" })
+        } else {
+          editor.commands.setContent(value)
+        }
       }
     },
-    [value]
+    [value, output]
   )
 
   const handleBlur = React.useCallback(
@@ -222,7 +230,7 @@ export const useMinimalTiptapEditor = ({
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: createExtensions({ placeholder, uploader }),
+    extensions: createExtensions({ placeholder, uploader, output }),
     editorProps: {
       attributes: {
         autocomplete: "off",
@@ -236,6 +244,22 @@ export const useMinimalTiptapEditor = ({
     onBlur: ({ editor }) => handleBlur(editor),
     ...props,
   })
+
+  // Update editor content when value changes externally
+  // This fixes the bug where markdown renders as plain text after switching components
+  React.useEffect(() => {
+    if (!editor || editor.isDestroyed) return
+    
+    const currentContent = getOutput(editor, output)
+    // Only update if content has actually changed
+    if (currentContent !== value && value !== undefined) {
+      if (output === "markdown" && typeof value === "string") {
+        editor.commands.setContent(value, { contentType: "markdown" })
+      } else {
+        editor.commands.setContent(value ?? "")
+      }
+    }
+  }, [editor, value, output])
 
   return editor
 }
