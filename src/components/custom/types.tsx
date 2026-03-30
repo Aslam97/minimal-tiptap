@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils"
 import { MinimalTiptapOne } from "./minimal-tiptap-one"
 import { MinimalTiptapThree } from "./minimal-tiptap-three"
 import Content from "../../data/content.json"
+import { markdownContent } from "../../data/markdown-content"
 
 const features = [
   {
@@ -52,6 +53,25 @@ const features = [
         placeholder="This is your placeholder..."
         editable={true}
         editorClassName="focus:outline-hidden px-5 py-4 h-full"
+      />
+    ),
+  },
+  {
+    name: "Minimal Tiptap 4",
+    className: "col-span-3",
+    background: (
+      <MinimalTiptapEditor
+        value={markdownContent}
+        throttleDelay={2000}
+        className={cn("h-full min-h-56 w-full min-w-0 rounded-xl")}
+        editorContentClassName="overflow-auto h-full"
+        output="markdown"
+        onChange={(value) => {
+          console.log("Updated value:", value)
+        }}
+        placeholder="Type your description here..."
+        editable={true}
+        editorClassName="focus:outline-hidden px-5 py-4 h-full"      
       />
     ),
   },

@@ -6,6 +6,9 @@ import { useEditor } from "@tiptap/react"
 import { Typography } from "@tiptap/extension-typography"
 import { TextStyle } from "@tiptap/extension-text-style"
 import { Placeholder, Selection } from "@tiptap/extensions"
+import { Markdown } from "@tiptap/markdown"
+import { TaskItem, TaskList } from "@tiptap/extension-list"
+import { TableKit } from "@tiptap/extension-table"
 import {
   Image,
   HorizontalRule,
@@ -14,6 +17,7 @@ import {
   UnsetAllMarks,
   ResetMarksOnEnter,
   FileHandler,
+  MarkdownPaste,
 } from "../extensions"
 import { cn } from "@/lib/utils"
 import { fileToBase64, getOutput, randomId } from "../utils"
@@ -22,7 +26,7 @@ import { toast } from "sonner"
 
 export interface UseMinimalTiptapEditorProps extends UseEditorOptions {
   value?: Content
-  output?: "html" | "json" | "text"
+  output?: "html" | "json" | "text" | "markdown"
   placeholder?: string
   editorClassName?: string
   throttleDelay?: number
@@ -46,9 +50,11 @@ async function fakeuploader(file: File): Promise<string> {
 const createExtensions = ({
   placeholder,
   uploader,
+  output = "html",
 }: {
   placeholder: string
   uploader?: (file: File) => Promise<string>
+  output: UseMinimalTiptapEditorProps["output"]
 }) => [
   StarterKit.configure({
     blockquote: { HTMLAttributes: { class: "block-node" } },
@@ -80,6 +86,7 @@ const createExtensions = ({
     // underline
     // trailingNode
   }),
+  
   Image.configure({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
@@ -181,6 +188,30 @@ const createExtensions = ({
   ResetMarksOnEnter,
   CodeBlockLowlight,
   Placeholder.configure({ placeholder: () => placeholder }),
+  // Add MarkdownPaste extension when output is markdown
+  ...(output === "markdown" ? [
+    // Markdown with GFM support for tables, task lists, etc.
+    Markdown.configure({
+      markedOptions: {
+        gfm: true,
+      },
+    }),
+    // Task lists (checkboxes)
+    TaskList.configure({
+      HTMLAttributes: { class: "task-list-node" },
+    }),
+    TaskItem.configure({
+      nested: true,
+    }),
+    // Tables
+    TableKit.configure({
+      table: {
+        resizable: true,
+        HTMLAttributes: { class: "table-node" },
+      },
+    }),
+    MarkdownPaste
+  ] : []),
 ]
 
 export const useMinimalTiptapEditor = ({
@@ -207,10 +238,12 @@ export const useMinimalTiptapEditor = ({
   const handleCreate = React.useCallback(
     (editor: Editor) => {
       if (value && editor.isEmpty) {
-        editor.commands.setContent(value)
+        editor.commands.setContent(value, {
+          contentType: output === "markdown" ? "markdown" : undefined,
+        })
       }
     },
-    [value]
+    [value, output]
   )
 
   const handleBlur = React.useCallback(
@@ -220,7 +253,7 @@ export const useMinimalTiptapEditor = ({
 
   const editor = useEditor({
     immediatelyRender: false,
-    extensions: createExtensions({ placeholder, uploader }),
+    extensions: createExtensions({ placeholder, uploader, output }),
     editorProps: {
       attributes: {
         autocomplete: "off",

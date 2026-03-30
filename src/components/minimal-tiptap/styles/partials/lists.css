@@ -21,3 +21,28 @@
 .minimal-tiptap-editor .ProseMirror ul ul ul {
   list-style: square;
 }
+
+/* Task Lists */
+.minimal-tiptap-editor .ProseMirror ul[data-type="taskList"] {
+  @apply list-none pl-0;
+}
+
+.minimal-tiptap-editor .ProseMirror ul[data-type="taskList"] li {
+  @apply flex items-start gap-2;
+}
+
+.minimal-tiptap-editor .ProseMirror ul[data-type="taskList"] li > label {
+  @apply flex items-center mt-1.5;
+}
+
+.minimal-tiptap-editor .ProseMirror ul[data-type="taskList"] li > label input[type="checkbox"] {
+  @apply size-4 cursor-pointer rounded border border-input accent-primary;
+}
+
+.minimal-tiptap-editor .ProseMirror ul[data-type="taskList"] li > div {
+  @apply flex-1;
+}
+
+.minimal-tiptap-editor .ProseMirror ul[data-type="taskList"] li[data-checked="true"] > div {
+  @apply text-muted-foreground line-through;
+}
