@@ -179,6 +179,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
           const base64 = await blobUrlToBase64(initSrc)
           setImageState((prev) => ({ ...prev, src: base64 }))
           updateAttributes({ src: base64 })
+          URL.revokeObjectURL(initSrc)
         } catch {
           setImageState((prev) => ({ ...prev, error: true }))
         }
@@ -201,6 +202,7 @@ export const ImageViewBlock: React.FC<NodeViewProps> = ({
         }))
 
         updateAttributes(normalizedData)
+        URL.revokeObjectURL(initSrc)
       } catch {
         setImageState((prev) => ({
           ...prev,

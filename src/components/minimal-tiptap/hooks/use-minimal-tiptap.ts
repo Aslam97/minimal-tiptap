@@ -47,6 +47,18 @@ async function fakeuploader(file: File): Promise<string> {
   return src
 }
 
+const createImageNodes = (files: File[]) =>
+  files.map((file) => ({
+    type: "image",
+    attrs: {
+      id: randomId(),
+      src: URL.createObjectURL(file),
+      alt: file.name,
+      title: file.name,
+      fileName: file.name,
+    },
+  }))
+
 const createExtensions = ({
   placeholder,
   uploader,
@@ -153,22 +165,10 @@ const createExtensions = ({
     allowedMimeTypes: ["image/*"],
     maxFileSize: 5 * 1024 * 1024,
     onDrop: (editor, files, pos) => {
-      files.forEach(async (file) => {
-        const src = await fileToBase64(file)
-        editor.commands.insertContentAt(pos, {
-          type: "image",
-          attrs: { src },
-        })
-      })
+      editor.commands.insertContentAt(pos, createImageNodes(files))
     },
     onPaste: (editor, files) => {
-      files.forEach(async (file) => {
-        const src = await fileToBase64(file)
-        editor.commands.insertContent({
-          type: "image",
-          attrs: { src },
-        })
-      })
+      editor.commands.insertContent(createImageNodes(files))
     },
     onValidationError: (errors) => {
       errors.forEach((error) => {
